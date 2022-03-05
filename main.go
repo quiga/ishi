@@ -39,6 +39,7 @@ Examples:
 	upstream := arguments["<upstream>"]
 	listen := arguments["--listen"]
 	verbose := arguments["--verbose"].(bool)
+	useXforward := arguments["--useXforward"].(bool)
 
 	var err error
 

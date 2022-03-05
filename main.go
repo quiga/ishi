@@ -16,7 +16,7 @@ func main() {
 	usage := `ishi.
 
 Usage:
-  ishi [-l=<port>] [--verbose] <upstream>
+  ishi [-l=<port>] [--verbose] [--useXforward] <upstream>
   ishi -h | --help
   ishi --version
 
@@ -27,6 +27,7 @@ Options:
   -h --help             Show help.
   --version             Show version.
   -l --listen=<port>    Specify port to listen.
+	--useXforward   Enable 'X-Forwarded-Host'
 	--verbose             Show debug information.
 
 Examples:
@@ -99,7 +100,9 @@ func httpfwd(listenAddr, scheme, remoteHost string, verbose bool) error {
 		func(w http.ResponseWriter, r *http.Request) {
 			originalHost := r.Host
 			r.Host = remoteHost
-			r.Header["X-Forwarded-Host"] = []string{originalHost}
+			if useXforward {
+				r.Header["X-Forwarded-Host"] = []string{originalHost}
+			}
 			if verbose {
 				if requestDump, err := httputil.DumpRequest(r, false); err == nil {
 					fmt.Println(string(requestDump))

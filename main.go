@@ -78,7 +78,7 @@ Examples:
 
 	// start reverse proxy server
 	fmt.Printf("Listening on 0.0.0.0:%d\nFowarding to %s\n", port, upstream)
-	err = httpfwd(fmt.Sprintf(":%d", port), scheme, upstreamHost, verbose)
+	err = httpfwd(fmt.Sprintf(":%d", port), scheme, upstreamHost, verbose, useXforward)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 		os.Exit(1)
@@ -96,7 +96,7 @@ func findAvailablePort() (int, error) {
 	return 0, errors.New("There is no available port to listen")
 }
 
-func httpfwd(listenAddr, scheme, remoteHost string, verbose bool) error {
+func httpfwd(listenAddr, scheme, remoteHost string, verbose bool, useXforward bool) error {
 	http.HandleFunc("/",
 		func(w http.ResponseWriter, r *http.Request) {
 			originalHost := r.Host
